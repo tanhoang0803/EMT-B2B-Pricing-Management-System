@@ -9,7 +9,6 @@ services:
   - type: web
     name: emt-b2b-backend
     env: node
-    plan: free
     rootDir: backend
     buildCommand: npm install
     startCommand: npm start
@@ -30,11 +29,10 @@ services:
           type: web
           property: host
 
-  # Frontend Static Site
+  # Frontend Static Site (always free on Render)
   - type: web
     name: emt-b2b-frontend
     env: static
-    plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
