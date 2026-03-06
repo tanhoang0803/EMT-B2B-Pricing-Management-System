@@ -1,4 +1,4 @@
-name: Deploy to Render
+name: Deploy
 
 on:
   push:
@@ -6,37 +6,46 @@ on:
       - main
 
 jobs:
-  deploy:
-    name: Trigger Render Deployment
+  deploy-backend:
+    name: Deploy Backend to Railway
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install & lint backend
+      - name: Install & verify backend
         working-directory: backend
         run: npm install
 
+      - name: Trigger Railway deploy
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" \
+            -X POST "${{ secrets.RAILWAY_DEPLOY_HOOK }}" | \
+            grep -q "2" && echo "Railway deploy triggered" || echo "Railway deploy hook failed"
+
+  deploy-frontend:
+    name: Deploy Frontend to Vercel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Install & build frontend
         working-directory: frontend
-        run: |
-          npm install
-          npm run build
+        run: npm install && npm run build
 
-      - name: Deploy Backend to Render
+      - name: Trigger Vercel deploy
         run: |
           curl -s -o /dev/null -w "%{http_code}" \
-            -X POST "${{ secrets.RENDER_BACKEND_DEPLOY_HOOK }}" | \
-            grep -q "200\|201" && echo "Backend deploy triggered" || echo "Backend deploy hook failed"
-
-      - name: Deploy Frontend to Render
-        run: |
-          curl -s -o /dev/null -w "%{http_code}" \
-            -X POST "${{ secrets.RENDER_FRONTEND_DEPLOY_HOOK }}" | \
-            grep -q "200\|201" && echo "Frontend deploy triggered" || echo "Frontend deploy hook failed"
+            -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}" | \
+            grep -q "2" && echo "Vercel deploy triggered" || echo "Vercel deploy hook failed"
