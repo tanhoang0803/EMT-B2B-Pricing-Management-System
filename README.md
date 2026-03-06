@@ -4,6 +4,19 @@ A full-stack enterprise platform for managing internal operational data and flex
 
 ---
 
+## Live Demo
+
+| Service | URL |
+|---------|-----|
+| Frontend | https://emt-b2b-pricing-management-system.onrender.com |
+| Backend API | https://emt-b2b-pricing-management-system-production.up.railway.app |
+
+**Demo credentials:**
+- Email: `admin@emt.com`
+- Password: `admin123`
+
+---
+
 ## Overview
 
 The system is split into two integrated modules:
@@ -28,11 +41,12 @@ The system is split into two integrated modules:
 
 | Layer      | Technology                  |
 |------------|-----------------------------|
-| Frontend   | React / Vue                 |
-| Backend    | Node.js / Java Spring Boot  |
-| Database   | MySQL / PostgreSQL           |
+| Frontend   | React 18 + Vite             |
+| Backend    | Node.js + Express           |
+| Database   | PostgreSQL + Sequelize ORM  |
 | API        | RESTful                     |
 | Auth       | JWT                         |
+| Hosting    | Render (frontend) + Railway (backend + DB) |
 
 ---
 
